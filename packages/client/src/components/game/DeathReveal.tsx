@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Role, TEAM_COLORS, TEAM_NAMES } from '@mafia/shared';
 import { RoleAvatarWithFallback } from '../common/RoleAvatar';
 
@@ -6,6 +7,7 @@ interface DeathRevealProps {
 }
 
 export function DeathReveal({ role }: DeathRevealProps) {
+  const { t } = useTranslation();
   const color = TEAM_COLORS[role.team];
   return (
     <div className="card p-6 text-center animate-scale-in">
@@ -15,7 +17,7 @@ export function DeathReveal({ role }: DeathRevealProps) {
         </div>
         <div className="text-5xl mb-2 animate-float">💀</div>
       </div>
-      <h2 className="text-2xl font-bold text-white mb-1">You are dead</h2>
+      <h2 className="text-2xl font-bold text-white mb-1">{t('deathReveal.youAreDead')}</h2>
       <div className="flex items-center justify-center gap-3 mb-3">
         <div
           className="w-12 h-12 rounded-full flex items-center justify-center"
@@ -25,11 +27,11 @@ export function DeathReveal({ role }: DeathRevealProps) {
         </div>
         <div className="text-left">
           <p className="text-lg font-semibold text-white">{role.name}</p>
-          <p className="text-sm" style={{ color }}>{TEAM_NAMES[role.team]} Team</p>
+          <p className="text-sm" style={{ color }}>{t(`roles.team_${role.team}`)}</p>
         </div>
       </div>
-      <p className="text-sm text-gray-400 mb-1">You can now see all roles</p>
-      <p className="text-xs text-gray-500">You can still chat with alive players</p>
+      <p className="text-sm text-gray-400 mb-1">{t('deathReveal.seeAllRoles')}</p>
+      <p className="text-xs text-gray-500">{t('deathReveal.chatWithAlive')}</p>
     </div>
   );
 }

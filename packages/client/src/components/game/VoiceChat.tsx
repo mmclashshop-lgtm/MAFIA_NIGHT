@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { Mic, MicOff, Phone, PhoneOff, Volume2 } from 'lucide-react';
 import { useVoiceChat } from '../../hooks/useVoiceChat';
 
 export function VoiceChat() {
+  const { t } = useTranslation();
   const { enabled, muted, peers, hasMedia, enable, disable, toggleMute } = useVoiceChat();
 
   return (
@@ -9,10 +11,10 @@ export function VoiceChat() {
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Volume2 className="w-4 h-4 text-gray-400" />
-          <span className="text-sm font-medium">Voice</span>
+          <span className="text-sm font-medium">{t('voiceChat.voice')}</span>
           {enabled && (
             <span className="text-xs text-gray-500">
-              ({peers.length + 1} connected)
+              {t('voiceChat.connected', { count: peers.length + 1 })}
             </span>
           )}
         </div>
@@ -20,10 +22,10 @@ export function VoiceChat() {
           <button
             onClick={enable}
             className="btn-ghost text-xs flex items-center gap-1"
-            title="Join voice chat"
+            title={t('voiceChat.joinVoice')}
           >
             <Phone className="w-3.5 h-3.5 text-green-400" />
-            Join
+            {t('voiceChat.join')}
           </button>
         ) : (
           <button
@@ -31,10 +33,10 @@ export function VoiceChat() {
             className={`btn-ghost text-xs flex items-center gap-1 ${
               muted ? 'text-red-400' : 'text-green-400'
             }`}
-            title={muted ? 'Unmute' : 'Mute'}
+            title={muted ? t('voiceChat.unmute') : t('voiceChat.mute')}
           >
             {muted ? <MicOff className="w-3.5 h-3.5" /> : <Mic className="w-3.5 h-3.5" />}
-            {muted ? 'Muted' : 'Live'}
+            {muted ? t('voiceChat.muted') : t('voiceChat.live')}
           </button>
         )}
       </div>
@@ -84,16 +86,16 @@ export function VoiceChat() {
           <button
             onClick={disable}
             className="btn-ghost text-xs text-red-400 hover:text-red-300 w-full flex items-center justify-center gap-1"
-            title="Leave voice chat"
+            title={t('voiceChat.leaveVoice')}
           >
             <PhoneOff className="w-3 h-3" />
-            Leave
+            {t('voiceChat.leave')}
           </button>
         </>
       )}
 
       {!hasMedia && enabled && (
-        <p className="text-xs text-gray-500 mt-1">Microphone access required</p>
+        <p className="text-xs text-gray-500 mt-1">{t('voiceChat.micRequired')}</p>
       )}
     </div>
   );

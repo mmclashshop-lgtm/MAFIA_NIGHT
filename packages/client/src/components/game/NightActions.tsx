@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Player, Role } from '@mafia/shared';
-import { Heart, Skull, Search, Syringe, Swords } from 'lucide-react';
+import { Heart, Skull, Search, Swords } from 'lucide-react';
 
 interface NightActionsProps {
   players: Player[];
@@ -8,25 +9,26 @@ interface NightActionsProps {
   onSubmit: (targetId: string, actionType?: string) => Promise<void>;
 }
 
-const roleActionLabels: Record<string, { verb: string; icon: React.ReactNode; color: string }> = {
-  mafia: { verb: 'Kill', icon: <Swords className="w-4 h-4" />, color: 'bg-red-600 hover:bg-red-700' },
-  godfather: { verb: 'Kill', icon: <Swords className="w-4 h-4" />, color: 'bg-red-600 hover:bg-red-700' },
-  doctor: { verb: 'Heal', icon: <Heart className="w-4 h-4" />, color: 'bg-green-600 hover:bg-green-700' },
-  medic: { verb: 'Heal', icon: <Heart className="w-4 h-4" />, color: 'bg-green-600 hover:bg-green-700' },
-        cop: { verb: 'Investigate', icon: <Search className="w-4 h-4" />, color: 'bg-[#8B0000] hover:bg-[#B22222]' },
-        detective: { verb: 'Investigate', icon: <Search className="w-4 h-4" />, color: 'bg-[#8B0000] hover:bg-[#B22222]' },
-  spy: { verb: 'Spy on', icon: <Search className="w-4 h-4" />, color: 'bg-purple-600 hover:bg-purple-700' },
-  serial_killer: { verb: 'Kill', icon: <Skull className="w-4 h-4" />, color: 'bg-red-700 hover:bg-red-800' },
-  vigilante: { verb: 'Shoot', icon: <Swords className="w-4 h-4" />, color: 'bg-orange-600 hover:bg-orange-700' },
-  sniper: { verb: 'Snipe', icon: <Swords className="w-4 h-4" />, color: 'bg-orange-600 hover:bg-orange-700' },
+const roleActionLabels: Record<string, { verbKey: string; icon: React.ReactNode; color: string }> = {
+  mafia: { verbKey: 'killVerb', icon: <Swords className="w-4 h-4" />, color: 'bg-red-600 hover:bg-red-700' },
+  godfather: { verbKey: 'killVerb', icon: <Swords className="w-4 h-4" />, color: 'bg-red-600 hover:bg-red-700' },
+  doctor: { verbKey: 'healVerb', icon: <Heart className="w-4 h-4" />, color: 'bg-green-600 hover:bg-green-700' },
+  medic: { verbKey: 'healVerb', icon: <Heart className="w-4 h-4" />, color: 'bg-green-600 hover:bg-green-700' },
+  cop: { verbKey: 'investigateVerb', icon: <Search className="w-4 h-4" />, color: 'bg-[#8B0000] hover:bg-[#B22222]' },
+  detective: { verbKey: 'investigateVerb', icon: <Search className="w-4 h-4" />, color: 'bg-[#8B0000] hover:bg-[#B22222]' },
+  spy: { verbKey: 'spyVerb', icon: <Search className="w-4 h-4" />, color: 'bg-purple-600 hover:bg-purple-700' },
+  serial_killer: { verbKey: 'killVerb', icon: <Skull className="w-4 h-4" />, color: 'bg-red-700 hover:bg-red-800' },
+  vigilante: { verbKey: 'shootVerb', icon: <Swords className="w-4 h-4" />, color: 'bg-orange-600 hover:bg-orange-700' },
+  sniper: { verbKey: 'snipeVerb', icon: <Swords className="w-4 h-4" />, color: 'bg-orange-600 hover:bg-orange-700' },
 };
 
 export function NightActions({ players, role, onSubmit }: NightActionsProps) {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState<string | null>(null);
   const [witchAction, setWitchAction] = useState<'save' | 'kill' | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const actionConfig = roleActionLabels[role.id] ?? { verb: 'Target', icon: null, color: 'btn-primary' };
+  const actionConfig = roleActionLabels[role.id] ?? { verbKey: 'target', icon: null, color: 'btn-primary' };
   const isWitch = role.id === 'witch';
 
   const handleSubmit = async () => {
@@ -44,7 +46,7 @@ export function NightActions({ players, role, onSubmit }: NightActionsProps) {
   return (
     <div className="card p-4">
       <h3 className="text-lg font-bold mb-3 flex items-center gap-2">
-        <span>🌙</span> Night Action: {role.name}
+        {t('nightActions.title', { role: role.name })}
       </h3>
 
       {isWitch && (
@@ -57,7 +59,7 @@ export function NightActions({ players, role, onSubmit }: NightActionsProps) {
                 : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
             }`}
           >
-            💚 Save Potion
+            {t('nightActions.savePotion')}
           </button>
           <button
             onClick={() => setWitchAction(witchAction === 'kill' ? null : 'kill')}
@@ -67,7 +69,7 @@ export function NightActions({ players, role, onSubmit }: NightActionsProps) {
                 : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
             }`}
           >
-            💀 Kill Potion
+            {t('nightActions.killPotion')}
           </button>
         </div>
       )}
@@ -75,11 +77,11 @@ export function NightActions({ players, role, onSubmit }: NightActionsProps) {
       <p className="text-sm text-gray-400 mb-3">
         {isWitch
           ? witchAction === 'save'
-            ? 'Choose a player to save from death tonight'
+            ? t('nightActions.chooseSave')
             : witchAction === 'kill'
-              ? 'Choose a player to kill tonight'
-              : 'Select a potion first'
-          : `Choose a target to ${actionConfig.verb.toLowerCase()}`}
+              ? t('nightActions.chooseKill')
+              : t('nightActions.choosePotion')
+          : t('nightActions.chooseTarget', { verb: t(`nightActions.${actionConfig.verbKey}`).toLowerCase() })}
       </p>
 
       <div className="flex flex-wrap gap-2 mb-4">
@@ -105,10 +107,10 @@ export function NightActions({ players, role, onSubmit }: NightActionsProps) {
       >
         {actionConfig.icon}
         {submitting
-          ? 'Submitting...'
+          ? t('nightActions.submitting')
           : isWitch && witchAction
-            ? `${witchAction === 'save' ? 'Save' : 'Kill'} ${players.find((p) => p.id === selected)?.name ?? ''}`
-            : `${actionConfig.verb} ${players.find((p) => p.id === selected)?.name ?? ''}`}
+            ? `${witchAction === 'save' ? t('nightActions.save') : t('nightActions.kill')} ${players.find((p) => p.id === selected)?.name ?? ''}`
+            : `${t(`nightActions.${actionConfig.verbKey}`)} ${players.find((p) => p.id === selected)?.name ?? ''}`}
       </button>
     </div>
   );

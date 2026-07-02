@@ -177,5 +177,164 @@
         "daysSurvived": 2
       }
     ]
+  },
+  {
+    "id": "game_mr3tnddfiq1rl72",
+    "roomCode": "VELMNP",
+    "startedAt": 1783016298395,
+    "endedAt": 1783016298429,
+    "winner": "mafia",
+    "dayCount": 4,
+    "playerCount": 4,
+    "duration": 34,
+    "rolePreset": "classic",
+    "players": [
+      {
+        "name": "كمنتا",
+        "role": "mafia",
+        "team": "mafia",
+        "alive": true,
+        "survived": true,
+        "isBot": false,
+        "kills": 0,
+        "daysSurvived": 3
+      },
+      {
+        "name": "Nick",
+        "role": "cop",
+        "team": "town",
+        "alive": true,
+        "survived": true,
+        "isBot": true,
+        "kills": 0,
+        "daysSurvived": 3
+      },
+      {
+        "name": "Vince",
+        "role": "doctor",
+        "team": "town",
+        "alive": false,
+        "survived": false,
+        "isBot": true,
+        "kills": 0,
+        "daysSurvived": 3
+      },
+      {
+        "name": "Uma",
+        "role": "villager",
+        "team": "town",
+        "alive": false,
+        "survived": false,
+        "isBot": true,
+        "kills": 0,
+        "daysSurvived": 3
+      }
+    ]
+  },
+  {
+    "id": "game_mr3tnddfiq1rl72",
+    "roomCode": "VELMNP",
+    "startedAt": 1783016298395,
+    "endedAt": 1783016306877,
+    "winner": "mafia",
+    "dayCount": 4,
+    "playerCount": 4,
+    "duration": 8482,
+    "rolePreset": "classic",
+    "players": [
+      {
+        "name": "كمنتا",
+        "role": "mafia",
+        "team": "mafia",
+        "alive": true,
+        "survived": true,
+        "isBot": false,
+        "kills": 0,
+        "daysSurvived": 3
+      },
+      {
+        "name": "Nick",
+        "role": "cop",
+        "team": "town",
+        "alive": true,
+        "survived": true,
+        "isBot": true,
+        "kills": 0,
+        "daysSurvived": 3
+      },
+      {
+        "name": "Vince",
+        "role": "doctor",
+        "team": "town",
+        "alive": false,
+        "survived": false,
+        "isBot": true,
+        "kills": 0,
+        "daysSurvived": 3
+      },
+      {
+        "name": "Uma",
+        "role": "villager",
+        "team": "town",
+        "alive": false,
+        "survived": false,
+        "isBot": true,
+        "kills": 0,
+        "daysSurvived": 3
+      }
+    ]
+  },
+  {
+    "id": "game_mr3tt9ag53acw20",
+    "roomCode": "TU3UMW",
+    "startedAt": 1783016602684,
+    "endedAt": 1783016602698,
+    "winner": "mafia",
+    "dayCount": 4,
+    "playerCount": 4,
+    "duration": 15,
+    "rolePreset": "classic",
+    "players": [
+      {
+        "name": "محمد",
+        "role": "cop",
+        "team": "town",
+        "alive": true,
+        "survived": true,
+        "isBot": false,
+        "kills": 0,
+        "daysSurvived": 3
+      },
+      {
+        "name": "Paul",
+        "role": "doctor",
+        "team": "town",
+        "alive": false,
+        "survived": false,
+        "isBot": true,
+        "kills": 0,
+        "daysSurvived": 3
+      },
+      {
+        "name": "Tony",
+        "role": "villager",
+        "team": "town",
+        "alive": false,
+        "survived": false,
+        "isBot": true,
+        "kills": 0,
+        "daysSurvived": 3
+      },
+      {
+        "name": "Xander",
+        "role": "mafia",
+        "team": "mafia",
+        "alive": true,
+        "survived": true,
+        "isBot": true,
+        "kills": 0,
+        "daysSurvived": 3
+      }
+    ]
   }
 ]

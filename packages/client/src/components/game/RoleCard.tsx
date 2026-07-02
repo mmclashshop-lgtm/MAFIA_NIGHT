@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';
 import { Role } from '@mafia/shared';
-import { TEAM_COLORS, TEAM_NAMES } from '@mafia/shared';
+import { TEAM_COLORS } from '@mafia/shared';
 import { RoleAvatarWithFallback } from '../common/RoleAvatar';
 
 interface RoleCardProps {
@@ -7,8 +8,9 @@ interface RoleCardProps {
 }
 
 export function RoleCard({ role }: RoleCardProps) {
+  const { t } = useTranslation();
   const teamColor = TEAM_COLORS[role.team];
-  const teamName = TEAM_NAMES[role.team];
+  const teamName = t(`roles.team_${role.team}`);
 
   return (
     <div className="card overflow-hidden animate-scale-in">
@@ -45,7 +47,7 @@ export function RoleCard({ role }: RoleCardProps) {
         </p>
         {role.team === 'mafia' && (
           <p className="text-xs mt-3 opacity-60" style={{ color: teamColor }}>
-            Mafia members: work together to eliminate the Town.
+            {t('roles.mafiaHint')}
           </p>
         )}
       </div>

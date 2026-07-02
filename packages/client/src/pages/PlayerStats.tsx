@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { getPlayerStats, type PlayerStatsData } from '../lib/api';
 import { ArrowLeft, Skull, Heart, Target, Award, Calendar } from 'lucide-react';
 
 export function PlayerStats() {
+  const { t } = useTranslation();
   const { name } = useParams<{ name: string }>();
   const navigate = useNavigate();
   const [stats, setStats] = useState<PlayerStatsData | null>(null);
@@ -15,9 +17,9 @@ export function PlayerStats() {
     setLoading(true);
     getPlayerStats(name)
       .then(data => { setStats(data); setError(null); })
-      .catch(() => setError('Player not found'))
+      .catch(() => setError(t('playerStats.notFound')))
       .finally(() => setLoading(false));
-  }, [name]);
+  }, [name, t]);
 
   if (loading) {
     return (
@@ -30,9 +32,9 @@ export function PlayerStats() {
   if (error || !stats) {
     return (
       <div className="card p-8 text-center">
-        <p className="text-red-400">{error || 'Player not found'}</p>
+        <p className="text-red-400">{error || t('playerStats.notFound')}</p>
         <button onClick={() => navigate('/leaderboard')} className="btn-secondary mt-4">
-          Back to Leaderboard
+          {t('playerStats.backToLeaderboard')}
         </button>
       </div>
     );
@@ -45,10 +47,10 @@ export function PlayerStats() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">{stats.name}</h1>
-          <p className="text-gray-400 text-sm mt-1">Player Statistics</p>
+          <p className="text-gray-400 text-sm mt-1">{t('playerStats.playerStatistics')}</p>
         </div>
         <button onClick={() => navigate('/leaderboard')} className="btn-secondary flex items-center gap-2">
-          <ArrowLeft className="w-4 h-4" /> Back
+          <ArrowLeft className="w-4 h-4" /> {t('playerStats.back')}
         </button>
       </div>
 
@@ -56,22 +58,22 @@ export function PlayerStats() {
         <div className="card p-4 text-center">
           <Award className="w-5 h-5 text-green-400 mx-auto mb-2" />
           <p className="text-2xl font-bold">{stats.winRate}%</p>
-          <p className="text-xs text-gray-500">Win Rate ({stats.totalWins}/{stats.totalGames})</p>
+          <p className="text-xs text-gray-500">{t('playerStats.winRate', { wins: stats.totalWins, total: stats.totalGames })}</p>
         </div>
         <div className="card p-4 text-center">
           <Target className="w-5 h-5 text-red-400 mx-auto mb-2" />
           <p className="text-2xl font-bold">{stats.totalKills}</p>
-          <p className="text-xs text-gray-500">Total Kills</p>
+          <p className="text-xs text-gray-500">{t('playerStats.totalKills')}</p>
         </div>
         <div className="card p-4 text-center">
           <Heart className="w-5 h-5 text-red-400 mx-auto mb-2" />
           <p className="text-2xl font-bold">{stats.survivalRate}%</p>
-          <p className="text-xs text-gray-500">Survival Rate ({stats.totalSurvived}/{stats.totalGames})</p>
+          <p className="text-xs text-gray-500">{t('playerStats.survivalRate', { survived: stats.totalSurvived, total: stats.totalGames })}</p>
         </div>
         <div className="card p-4 text-center">
           <Calendar className="w-5 h-5 text-yellow-400 mx-auto mb-2" />
           <p className="text-2xl font-bold">{stats.totalGames}</p>
-          <p className="text-xs text-gray-500">Games Played</p>
+          <p className="text-xs text-gray-500">{t('playerStats.gamesPlayed')}</p>
         </div>
       </div>
 
@@ -79,14 +81,14 @@ export function PlayerStats() {
         <div className="card p-5">
           <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
             <Skull className="w-4 h-4 text-gray-400" />
-            Role Statistics
+            {t('playerStats.roleStatistics')}
           </h2>
           <div className="space-y-3">
             {roleEntries.map(([role, roleStat]) => (
               <div key={role} className="flex items-center justify-between">
                 <span className="text-sm capitalize">{role.replace('_', ' ')}</span>
                 <div className="flex items-center gap-4 text-sm">
-                  <span className="text-gray-400">{roleStat.games} games</span>
+                  <span className="text-gray-400">{t('playerStats.games', { count: roleStat.games })}</span>
                   <span className="text-green-400">{roleStat.wins}W</span>
                   <span className="text-red-400">{roleStat.games - roleStat.wins}L</span>
                   <div className="w-24 h-2 bg-gray-800 rounded-full overflow-hidden">
@@ -104,22 +106,20 @@ export function PlayerStats() {
 
       {stats.recentGames.length > 0 && (
         <div className="card p-5">
-          <h2 className="text-lg font-bold mb-4">Recent Games</h2>
+          <h2 className="text-lg font-bold mb-4">{t('playerStats.recentGames')}</h2>
           <div className="space-y-2">
             {stats.recentGames.map((game, idx) => (
               <div key={idx} className="flex items-center justify-between text-sm py-1.5 border-b border-gray-800 last:border-0">
                 <div className="flex items-center gap-3">
-                  <span className={`w-2 h-2 rounded-full ${
-                    game.survived ? 'bg-green-500' : 'bg-red-500'
-                  }`} />
+                  <span className={`w-2 h-2 rounded-full ${game.survived ? 'bg-green-500' : 'bg-red-500'}`} />
                   <span className="capitalize">{game.role.replace('_', ' ')}</span>
                   <span className="text-gray-500">({game.team})</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className={`text-xs ${game.team === game.winner ? 'text-green-400' : 'text-red-400'}`}>
-                    {game.team === game.winner ? 'Won' : 'Lost'}
+                    {game.team === game.winner ? t('playerStats.won') : t('playerStats.lost')}
                   </span>
-                  <span className="text-gray-500">Day {game.dayCount}</span>
+                  <span className="text-gray-500">{t('playerStats.day', { count: game.dayCount })}</span>
                   <span className="text-gray-500 text-xs">
                     {new Date(game.startedAt).toLocaleDateString()}
                   </span>

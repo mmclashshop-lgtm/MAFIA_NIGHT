@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Trophy, Swords, Heart, Skull, Star, Zap, Gamepad2 } from 'lucide-react';
-import { ACHIEVEMENTS, RANK_TIERS } from '@mafia/shared';
 
 interface ProfileData {
   name: string;
@@ -70,19 +69,19 @@ export function Profile() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <Skull className="w-12 h-12 text-gray-600" />
-        <p className="text-gray-400 text-lg">{t('playerStats.notFound', 'Player not found')}</p>
+        <p className="text-gray-400 text-lg">{t('playerStats.notFound')}</p>
         <button onClick={() => navigate('/leaderboard')} className="btn-secondary flex items-center gap-2">
           <ArrowLeft className="w-4 h-4" />
-          {t('playerStats.backToLeaderboard', 'Back to Leaderboard')}
+          {t('playerStats.backToLeaderboard')}
         </button>
       </div>
     );
   }
 
   const tabs = [
-    { id: 'stats' as const, label: 'Statistics', icon: Trophy },
-    { id: 'achievements' as const, label: `Achievements (${profile.achievements.length})`, icon: Star },
-    { id: 'games' as const, label: 'Recent Games', icon: Gamepad2 },
+    { id: 'stats' as const, label: t('profile.statistics'), icon: Trophy },
+    { id: 'achievements' as const, label: t('profile.achievements', { count: profile.achievements.length }), icon: Star },
+    { id: 'games' as const, label: t('profile.recentGames'), icon: Gamepad2 },
   ];
 
   return (
@@ -92,30 +91,28 @@ export function Profile() {
         {t('common.back')}
       </button>
 
-      {/* Header */}
       <div className="card p-6 mb-4 text-center">
         <div className="text-5xl mb-3">{profile.rankIcon}</div>
         <h1 className="text-2xl font-bold mb-1">{profile.name}</h1>
         <div className="flex items-center justify-center gap-2 text-sm">
           <span className="text-[#8B0000] font-semibold">{profile.rank}</span>
           <span className="text-gray-500">·</span>
-          <span className="text-gray-400">{profile.score.toLocaleString()} pts</span>
+          <span className="text-gray-400">{profile.score.toLocaleString()} {t('profile.pts')}</span>
         </div>
         {profile.bestWinStreak > 1 && (
           <div className="flex items-center justify-center gap-1 mt-2 text-sm text-gray-500">
             <Zap className="w-3.5 h-3.5" />
-            Best streak: {profile.bestWinStreak} wins
+            {t('profile.bestStreak', { count: profile.bestWinStreak })}
           </div>
         )}
       </div>
 
-      {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
         {[
-          { label: 'Win Rate', value: `${profile.winRate}%`, icon: Trophy, color: 'text-yellow-400' },
-          { label: 'Wins', value: `${profile.totalWins}/${profile.totalGames}`, icon: Star, color: 'text-green-400' },
-          { label: 'Kills', value: profile.totalKills, icon: Swords, color: 'text-red-400' },
-          { label: 'Survival', value: `${profile.survivalRate}%`, icon: Heart, color: 'text-blue-400' },
+          { label: t('profile.winRate'), value: `${profile.winRate}%`, icon: Trophy, color: 'text-yellow-400' },
+          { label: t('profile.wins'), value: `${profile.totalWins}/${profile.totalGames}`, icon: Star, color: 'text-green-400' },
+          { label: t('profile.kills'), value: profile.totalKills, icon: Swords, color: 'text-red-400' },
+          { label: t('profile.survival'), value: `${profile.survivalRate}%`, icon: Heart, color: 'text-blue-400' },
         ].map((stat) => (
           <div key={stat.label} className="card-hover p-4 text-center">
             <stat.icon className={`w-5 h-5 ${stat.color} mx-auto mb-2`} />
@@ -125,7 +122,6 @@ export function Profile() {
         ))}
       </div>
 
-      {/* Tabs */}
       <div className="flex gap-1 mb-4">
         {tabs.map((tab) => (
           <button
@@ -143,13 +139,12 @@ export function Profile() {
         ))}
       </div>
 
-      {/* Tab Content */}
       <div className="card p-6 min-h-[300px]">
         {activeTab === 'stats' && (
           <div className="space-y-4">
-            <h3 className="font-semibold text-white mb-3">Role Statistics</h3>
+            <h3 className="font-semibold text-white mb-3">{t('profile.roleStatistics')}</h3>
             {Object.entries(profile.roleStats).length === 0 ? (
-              <p className="text-gray-500 text-sm">No role data yet</p>
+              <p className="text-gray-500 text-sm">{t('profile.noRoleData')}</p>
             ) : (
               <div className="space-y-2">
                 {Object.entries(profile.roleStats)
@@ -160,14 +155,14 @@ export function Profile() {
                         <p className="text-sm font-medium text-white capitalize">
                           {roleId.replace('_', ' ')}
                         </p>
-                        <p className="text-xs text-gray-500">{stats.games} games</p>
+                        <p className="text-xs text-gray-500">{t('profile.games', { count: stats.games })}</p>
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-medium text-green-400">
                           {stats.wins}W
                         </p>
                         <p className="text-xs text-gray-500">
-                          {stats.games > 0 ? Math.round((stats.wins / stats.games) * 100) : 0}% win
+                          {stats.games > 0 ? Math.round((stats.wins / stats.games) * 100) : 0}{t('profile.winPercent')}
                         </p>
                       </div>
                     </div>
@@ -179,12 +174,12 @@ export function Profile() {
 
         {activeTab === 'achievements' && (
           <div>
-            <h3 className="font-semibold text-white mb-3">Achievements</h3>
+            <h3 className="font-semibold text-white mb-3">{t('profile.achievementsTitle')}</h3>
             {profile.achievementDetails.length === 0 ? (
               <div className="text-center py-8">
                 <Star className="w-10 h-10 text-gray-600 mx-auto mb-3" />
-                <p className="text-gray-500 text-sm">No achievements yet</p>
-                <p className="text-gray-600 text-xs mt-1">Play more games to unlock achievements!</p>
+                <p className="text-gray-500 text-sm">{t('profile.noAchievements')}</p>
+                <p className="text-gray-600 text-xs mt-1">{t('profile.playMore')}</p>
               </div>
             ) : (
               <div className="grid gap-2">
@@ -211,23 +206,21 @@ export function Profile() {
 
         {activeTab === 'games' && (
           <div>
-            <h3 className="font-semibold text-white mb-3">Recent Games</h3>
+            <h3 className="font-semibold text-white mb-3">{t('profile.recentGames')}</h3>
             {profile.recentGames.length === 0 ? (
-              <p className="text-gray-500 text-sm text-center py-8">No games played yet</p>
+              <p className="text-gray-500 text-sm text-center py-8">{t('profile.noGamesPlayed')}</p>
             ) : (
               <div className="space-y-2">
                 {[...profile.recentGames].reverse().slice(-10).reverse().map((game, i) => (
                   <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-white/5">
                     <div className="flex items-center gap-3">
-                      <span className={`w-2 h-2 rounded-full ${
-                        game.survived ? 'bg-green-500' : 'bg-red-500'
-                      }`} />
+                      <span className={`w-2 h-2 rounded-full ${game.survived ? 'bg-green-500' : 'bg-red-500'}`} />
                       <div>
                         <p className="text-sm font-medium text-white capitalize">
                           {game.role.replace('_', ' ')}
                         </p>
                         <p className="text-xs text-gray-500">
-                          Day {game.dayCount} · {new Date(game.startedAt).toLocaleDateString()}
+                          {t('profile.day', { count: game.dayCount })} · {new Date(game.startedAt).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
@@ -236,7 +229,7 @@ export function Profile() {
                         ? 'bg-green-900/30 text-green-400'
                         : 'bg-red-900/30 text-red-400'
                     }`}>
-                      {game.team === game.winner ? 'Won' : 'Lost'}
+                      {game.team === game.winner ? t('profile.won') : t('profile.lost')}
                     </span>
                   </div>
                 ))}

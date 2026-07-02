@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { getLeaderboard, getTotalStats, type LeaderboardEntry, type TotalStats } from '../lib/api';
-import { Trophy, ArrowLeft, TrendingUp, Users, Activity, Medal, Crown } from 'lucide-react';
+import { Trophy, ArrowLeft, TrendingUp, Users, Activity, Crown } from 'lucide-react';
 
 const RANK_ICONS: Record<string, string> = {
   'Bronze': '🥉',
@@ -22,6 +23,7 @@ const RANK_COLORS: Record<string, string> = {
 };
 
 export function Leaderboard() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [stats, setStats] = useState<TotalStats | null>(null);
@@ -41,11 +43,11 @@ export function Leaderboard() {
   });
 
   const sortButtons = [
-    { key: 'score' as const, label: 'Rank', icon: Crown },
-    { key: 'winRate' as const, label: 'Win Rate', icon: TrendingUp },
-    { key: 'wins' as const, label: 'Wins', icon: Trophy },
-    { key: 'games' as const, label: 'Games', icon: Users },
-    { key: 'kills' as const, label: 'Kills' },
+    { key: 'score' as const, label: t('leaderboard.rank'), icon: Crown },
+    { key: 'winRate' as const, label: t('leaderboard.winRate'), icon: TrendingUp },
+    { key: 'wins' as const, label: t('leaderboard.wins'), icon: Trophy },
+    { key: 'games' as const, label: t('leaderboard.games'), icon: Users },
+    { key: 'kills' as const, label: t('leaderboard.kills') },
   ];
 
   return (
@@ -54,16 +56,16 @@ export function Leaderboard() {
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <Trophy className="w-6 h-6 text-yellow-500" />
-            Leaderboard
+            {t('leaderboard.title')}
           </h1>
           {stats && (
             <p className="text-gray-400 text-sm mt-1">
-              {stats.totalGames} games played by {stats.totalPlayers} players
+              {t('leaderboard.gamesPlayedBy', { games: stats.totalGames, players: stats.totalPlayers })}
             </p>
           )}
         </div>
         <button onClick={() => navigate('/')} className="btn-secondary flex items-center gap-2">
-          <ArrowLeft className="w-4 h-4" /> Back
+          <ArrowLeft className="w-4 h-4" /> {t('leaderboard.back')}
         </button>
       </div>
 
@@ -107,7 +109,7 @@ export function Leaderboard() {
                   {RANK_ICONS[entry.rank] ?? '🥉'}
                 </span>
               </p>
-              <p className="text-xs text-gray-500">{entry.rank} · {entry.score} pts</p>
+              <p className="text-xs text-gray-500">{entry.rank} · {entry.score} {t('leaderboard.pts')}</p>
             </div>
 
             <div className="hidden sm:block text-center min-w-[80px]">
@@ -118,16 +120,16 @@ export function Leaderboard() {
             </div>
 
             <div className="text-right text-sm min-w-[80px]">
-              <p className="text-gray-400">{entry.games} <span className="text-gray-600">games</span></p>
-              <p className="text-xs text-gray-500">{entry.kills} kills</p>
+              <p className="text-gray-400">{entry.games} <span className="text-gray-600">{t('leaderboard.gamesLabel')}</span></p>
+              <p className="text-xs text-gray-500">{entry.kills} {t('leaderboard.killsLabel')}</p>
             </div>
           </div>
         ))}
         {sorted.length === 0 && (
           <div className="card p-8 text-center text-gray-500">
             <Activity className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p>No games played yet</p>
-            <p className="text-sm mt-1">Complete a game to see stats here</p>
+            <p>{t('leaderboard.noGamesPlayed')}</p>
+            <p className="text-sm mt-1">{t('leaderboard.noStatsDesc')}</p>
           </div>
         )}
       </div>

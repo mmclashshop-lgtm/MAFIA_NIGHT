@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Phase } from '@mafia/shared';
 import { formatTime } from '../../lib/utils';
 
@@ -8,15 +9,16 @@ interface PhaseIndicatorProps {
   endsAt: number;
 }
 
-const phaseConfig: Record<Phase, { label: string; color: string; icon: string }> = {
-  lobby: { label: 'Lobby', color: 'text-gray-400', icon: '⏳' },
-  night: { label: 'Night', color: 'text-indigo-400', icon: '🌙' },
-  day: { label: 'Day', color: 'text-yellow-400', icon: '☀️' },
-  voting: { label: 'Voting', color: 'text-orange-400', icon: '🗳️' },
-  ended: { label: 'Game Over', color: 'text-red-400', icon: '🏁' },
+const phaseConfig: Record<Phase, { key: string; color: string }> = {
+  lobby: { key: 'lobby', color: 'text-gray-400' },
+  night: { key: 'night', color: 'text-indigo-400' },
+  day: { key: 'day', color: 'text-yellow-400' },
+  voting: { key: 'voting', color: 'text-orange-400' },
+  ended: { key: 'gameOver', color: 'text-red-400' },
 };
 
 export function PhaseIndicator({ phase, day, endsAt }: PhaseIndicatorProps) {
+  const { t } = useTranslation();
   const [timeLeft, setTimeLeft] = useState(0);
 
   useEffect(() => {
@@ -34,19 +36,19 @@ export function PhaseIndicator({ phase, day, endsAt }: PhaseIndicatorProps) {
   return (
     <div className="card p-4 flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <span className="text-2xl">{config.icon}</span>
+        <span className="text-2xl">{t(`phaseIndicator.${config.key}`).split(' ')[0]}</span>
         <div>
-          <p className={`text-lg font-bold ${config.color}`}>{config.label}</p>
-          {day > 0 && <p className="text-xs text-gray-500">Day {day}</p>}
+          <p className={`text-lg font-bold ${config.color}`}>{t(`phaseIndicator.${config.key}`)}</p>
+          {day > 0 && <p className="text-xs text-gray-500">{t('phaseIndicator.dayLabel', { number: day })}</p>}
         </div>
       </div>
 
       {phase !== 'lobby' && phase !== 'ended' && (
-        <div className="text-right">
+        <div className="text-left">
           <p className="text-2xl font-mono font-bold tabular-nums">
             {formatTime(timeLeft)}
           </p>
-          <p className="text-xs text-gray-500">remaining</p>
+          <p className="text-xs text-gray-500">{t('phaseIndicator.remaining')}</p>
         </div>
       )}
     </div>

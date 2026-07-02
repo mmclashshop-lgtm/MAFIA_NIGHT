@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useGameStore } from '../../store/gameStore';
 import { useSocket as useSocketHook } from '../../hooks/useSocket';
 import { getSocket } from '../../lib/socket';
@@ -17,6 +18,7 @@ interface ChatPanelProps {
 }
 
 export function ChatPanel({ isNight = false, isDead = false }: ChatPanelProps) {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [mafiaMessages, setMafiaMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -66,12 +68,12 @@ export function ChatPanel({ isNight = false, isDead = false }: ChatPanelProps) {
         className="flex items-center gap-2 p-3 border-b border-gray-800 hover:bg-gray-800/50 transition-colors"
       >
         <MessageSquare className="w-4 h-4" />
-        <span className="text-sm font-medium">Chat</span>
+        <span className="text-sm font-medium">{t('chatPanel.chat')}</span>
         {mafiaMessages.length > 0 && tab !== 'mafia' && (
           <span className="text-xs bg-red-600 text-white px-1.5 py-0.5 rounded-full">{mafiaMessages.length}</span>
         )}
-        {!canChat && tab !== 'mafia' && <span className="text-xs text-gray-500 ml-auto">(night)</span>}
-        {isDead && <span className="text-xs text-purple-400 ml-auto">(spectating)</span>}
+        {!canChat && tab !== 'mafia' && <span className="text-xs text-gray-500 mr-auto">({t('chatPanel.night')})</span>}
+        {isDead && <span className="text-xs text-purple-400 mr-auto">({t('chatPanel.spectating')})</span>}
       </button>
 
       <div className={`flex-1 flex flex-col ${collapsed ? 'hidden' : ''}`}>
@@ -81,15 +83,15 @@ export function ChatPanel({ isNight = false, isDead = false }: ChatPanelProps) {
               onClick={() => setTab('all')}
               className={`flex-1 text-xs py-2 transition-colors ${tab === 'all' ? 'bg-gray-800 text-white' : 'text-gray-500 hover:text-gray-300'}`}
             >
-              <MessageSquare className="w-3 h-3 inline mr-1" />
-              General
+              <MessageSquare className="w-3 h-3 inline ml-1" />
+              {t('chatPanel.general')}
             </button>
             <button
               onClick={() => setTab('mafia')}
               className={`flex-1 text-xs py-2 transition-colors ${tab === 'mafia' ? 'bg-red-900/50 text-red-300' : 'text-gray-500 hover:text-gray-300'}`}
             >
-              <Skull className="w-3 h-3 inline mr-1" />
-              Mafia {mafiaMessages.length > 0 && `(${mafiaMessages.length})`}
+              <Skull className="w-3 h-3 inline ml-1" />
+              {t('chatPanel.mafia')} {mafiaMessages.length > 0 && `(${mafiaMessages.length})`}
             </button>
           </div>
         )}
@@ -97,13 +99,13 @@ export function ChatPanel({ isNight = false, isDead = false }: ChatPanelProps) {
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {activeMessages.length === 0 && (
             <p className="text-sm text-gray-500 text-center mt-4">
-              {tab === 'mafia' ? 'Mafia chat - coordinate secretly' : canChat ? 'No messages yet' : 'Chat is only available during the day'}
+              {tab === 'mafia' ? t('chatPanel.mafiaChat') : canChat ? t('chatPanel.noMessages') : t('chatPanel.chatDayOnly')}
             </p>
           )}
           {activeMessages.map((msg, idx) => (
-            <div key={idx} className={`text-sm ${msg.from === playerId ? 'text-right' : ''}`}>
+            <div key={idx} className={`text-sm ${msg.from === playerId ? 'text-left' : ''}`}>
               {msg.from !== playerId && (
-                <span className="text-xs text-gray-500 mr-1">{msg.name}:</span>
+                <span className="text-xs text-gray-500 ml-1">{msg.name}:</span>
               )}
               <span className="text-gray-200">{msg.text}</span>
             </div>
@@ -118,7 +120,7 @@ export function ChatPanel({ isNight = false, isDead = false }: ChatPanelProps) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder={tab === 'mafia' ? 'Mafia whisper...' : 'Type a message...'}
+              placeholder={tab === 'mafia' ? t('chatPanel.mafiaWhisper') : t('chatPanel.typeMessage')}
               className="input-field flex-1"
               maxLength={500}
             />

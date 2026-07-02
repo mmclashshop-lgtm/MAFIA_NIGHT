@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Player, Phase, TEAM_COLORS } from '@mafia/shared';
 import { cn } from '../../lib/utils';
 import { RoleAvatar } from '../common/RoleAvatar';
@@ -11,6 +12,7 @@ interface PlayerCardProps {
 }
 
 export function PlayerCard({ player, isCurrentPlayer, phase, isDead = false, onAction }: PlayerCardProps) {
+  const { t } = useTranslation();
   const isNightActionPhase = phase === 'night';
   const isVotingPhase = phase === 'voting';
   const canInteract = (isNightActionPhase || isVotingPhase) && player.alive && !isCurrentPlayer && !isDead;
@@ -49,8 +51,8 @@ export function PlayerCard({ player, isCurrentPlayer, phase, isDead = false, onA
           {player.role.emoji} {player.role.name}
         </p>
       )}
-      {!player.alive && <p className="text-xs text-red-400 mt-0.5">Dead</p>}
-      {player.disconnected && <p className="text-xs text-yellow-400 mt-0.5">Disconnected</p>}
+      {!player.alive && <p className="text-xs text-red-400 mt-0.5">{t('playerCard.dead')}</p>}
+      {player.disconnected && <p className="text-xs text-yellow-400 mt-0.5">{t('playerCard.disconnected')}</p>}
       {isDead && player.role && (
         <p className="text-xs mt-0.5" style={{ color: TEAM_COLORS[player.team] }}>{player.team}</p>
       )}

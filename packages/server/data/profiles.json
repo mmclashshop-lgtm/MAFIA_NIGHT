@@ -1,0 +1,67 @@
+{
+  "كمنتا": {
+    "name": "كمنتا",
+    "totalGames": 2,
+    "totalWins": 2,
+    "totalKills": 0,
+    "totalSurvived": 2,
+    "score": 310,
+    "achievements": [
+      "first_blood",
+      "perfect_game"
+    ],
+    "consecutiveWins": 2,
+    "bestWinStreak": 2,
+    "roleStats": {
+      "mafia": {
+        "games": 2,
+        "wins": 2
+      }
+    },
+    "recentGames": [
+      {
+        "winner": "mafia",
+        "role": "mafia",
+        "team": "mafia",
+        "survived": true,
+        "dayCount": 4,
+        "startedAt": 1783016298500
+      },
+      {
+        "winner": "mafia",
+        "role": "mafia",
+        "team": "mafia",
+        "survived": true,
+        "dayCount": 4,
+        "startedAt": 1783016306916
+      }
+    ]
+  },
+  "محمد": {
+    "name": "محمد",
+    "totalGames": 1,
+    "totalWins": 0,
+    "totalKills": 0,
+    "totalSurvived": 1,
+    "score": 205,
+    "achievements": [],
+    "consecutiveWins": 0,
+    "bestWinStreak": 0,
+    "roleStats": {
+      "cop": {
+        "games": 1,
+        "wins": 0
+      }
+    },
+    "recentGames": [
+      {
+        "winner": "mafia",
+        "role": "cop",
+        "team": "town",
+        "survived": true,
+        "dayCount": 4,
+        "startedAt": 1783016602723
+      }
+    ]
+  }
+}

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Player } from '@mafia/shared';
 
 interface VotingPanelProps {
@@ -8,6 +9,7 @@ interface VotingPanelProps {
 }
 
 export function VotingPanel({ players, hasVoted, onSubmit }: VotingPanelProps) {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -21,17 +23,17 @@ export function VotingPanel({ players, hasVoted, onSubmit }: VotingPanelProps) {
   if (hasVoted) {
     return (
       <div className="card p-4 text-center">
-        <p className="text-green-400 font-medium">✓ You have voted</p>
-        <p className="text-sm text-gray-400 mt-1">Waiting for other players...</p>
+        <p className="text-green-400 font-medium">{t('votingPanel.voted')}</p>
+        <p className="text-sm text-gray-400 mt-1">{t('votingPanel.waiting')}</p>
       </div>
     );
   }
 
   return (
     <div className="card p-4">
-      <h3 className="text-lg font-bold mb-3">🗳️ Vote to Eliminate</h3>
+      <h3 className="text-lg font-bold mb-3">{t('votingPanel.title')}</h3>
       <p className="text-sm text-gray-400 mb-3">
-        Choose a player to eliminate
+        {t('votingPanel.choosePlayer')}
       </p>
 
       <div className="flex flex-wrap gap-2 mb-4">
@@ -56,10 +58,10 @@ export function VotingPanel({ players, hasVoted, onSubmit }: VotingPanelProps) {
         className="btn-danger w-full"
       >
         {submitting
-          ? 'Voting...'
+          ? t('votingPanel.voting')
           : selected
-            ? `Eliminate ${players.find((p) => p.id === selected)?.name}`
-            : 'Select a player'}
+            ? t('votingPanel.eliminate', { name: players.find((p) => p.id === selected)?.name })
+            : t('votingPanel.selectPlayer')}
       </button>
     </div>
   );
