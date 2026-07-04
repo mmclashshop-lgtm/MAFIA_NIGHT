@@ -154,6 +154,14 @@ export function useSocket() {
       addToast('error', data.message);
     });
 
+    socket.on('game:rewards', (data: { xp: number; totalXP: number; newLevel: number; newAchievements?: string[] }) => {
+      if (data.newAchievements && data.newAchievements.length > 0) {
+        data.newAchievements.forEach((id) => {
+          addToast('success', `🏆 Achievement unlocked!`);
+        });
+      }
+    });
+
     socket.on('game:end', (data: { winner: string; players?: Array<{ id: string; name: string; role: string; team: string; alive: boolean }> }) => {
       setGameState((prev) => {
         if (!prev) return prev;
@@ -183,6 +191,7 @@ export function useSocket() {
       socket.off('player:left');
       socket.off('player:died');
       socket.off('error');
+      socket.off('game:rewards');
       socket.off('game:end');
       socket.off('matchmaking:found');
       socket.off('matchmaking:update');

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Trophy, Swords, Heart, Skull, Star, Zap, Gamepad2, Shield, Crown } from 'lucide-react';
+import { ArrowLeft, Trophy, Swords, Heart, Skull, Star, Zap, Gamepad2, Shield, Crown, Medal, Award } from 'lucide-react';
 import { PlayerAvatar } from '../components/common/PlayerAvatar';
 import { EmptyState } from '../components/common/EmptyState';
-import { getLevel, getLevelProgress } from '@mafia/shared';
+import { getLevel, getLevelProgress, ACHIEVEMENTS } from '@mafia/shared';
 
 const ELO_TIERS = [
   { min: 0, name: 'Bronze', color: 'text-amber-700', bg: 'bg-amber-900/20', border: 'border-amber-700/30' },
@@ -28,6 +28,8 @@ interface ProfileData {
   roleStats: Record<string, { games: number; wins: number }>;
   recentGames: Array<{ winner: string | null; role: string; team: string; survived: boolean; dayCount: number; startedAt: number }>;
   elo?: { casual: number; competitive: number }; xp?: number; level?: number; userId?: string;
+  achievements?: string[];
+  coins?: number;
 }
 
 export function Profile() {
@@ -36,7 +38,7 @@ export function Profile() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'stats' | 'games'>('stats');
+  const [activeTab, setActiveTab] = useState<'stats' | 'games' | 'achievements'>('stats');
 
   useEffect(() => {
     if (!name) return;
@@ -107,7 +109,7 @@ export function Profile() {
             {profile.score.toLocaleString()} {t('profile.pts')}
           </p>
 
-          {/* ELO + Level */}
+          {/* ELO + Level + Coins */}
           <div className="flex items-center justify-center gap-4 mt-4 text-sm">
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/30">
               <Shield className="w-4 h-4 text-yellow-400" />
@@ -118,6 +120,11 @@ export function Profile() {
               <Star className="w-4 h-4 text-blue-400" />
               <span className="text-blue-400 font-bold">{profile.level ?? 1}</span>
               <span className="text-gray-500">{t('profile.level')}</span>
+            </div>
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/30">
+              <span className="text-lg">🪙</span>
+              <span className="text-yellow-400 font-bold">{profile.coins?.toLocaleString() ?? 0}</span>
+              <span className="text-gray-500">{t('store.coins')}</span>
             </div>
           </div>
 
@@ -167,6 +174,7 @@ export function Profile() {
       <div className="flex gap-1">
         {[
           { id: 'stats' as const, label: t('profile.statistics'), icon: Trophy },
+          { id: 'achievements' as const, label: t('profile.achievements', { count: profile.achievements?.length ?? 0 }), icon: Award },
           { id: 'games' as const, label: t('profile.recentGames'), icon: Gamepad2 },
         ].map((tab) => (
           <button key={tab.id} onClick={() => setActiveTab(tab.id)}
@@ -183,6 +191,28 @@ export function Profile() {
 
       {/* Tab Content */}
       <div className="card-glass p-5 min-h-[250px]">
+        {activeTab === 'achievements' && (
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold">{t('profile.achievementsTitle')}</h3>
+            {!profile.achievements || profile.achievements.length === 0 ? (
+              <EmptyState icon={<Award className="w-8 h-8 text-gray-500" />} title={t('profile.noAchievements')} description={t('profile.playMore')} />
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {profile.achievements.map((id) => {
+                  const ach = ACHIEVEMENTS[id as keyof typeof ACHIEVEMENTS];
+                  if (!ach) return null;
+                  return (
+                    <div key={id} className="card-hover p-3 text-center">
+                      <div className="text-3xl mb-2">{ach.icon}</div>
+                      <p className="text-xs font-semibold text-white">{ach.name}</p>
+                      <p className="text-[10px] text-gray-500 mt-1">{ach.description}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
         {activeTab === 'stats' && (
           <div className="space-y-4">
             <h3 className="text-sm font-bold">{t('profile.roleStatistics')}</h3>

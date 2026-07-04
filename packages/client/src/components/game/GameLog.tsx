@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { memo, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GameEvent } from '@mafia/shared';
 import { ScrollText, Skull, Heart, Search, Vote, Swords, Eye, Moon } from 'lucide-react';
@@ -27,12 +27,22 @@ const eventColors: Record<string, string> = {
   phase_change: 'text-indigo-400',
 };
 
-export function GameLog({ events }: GameLogProps) {
+export const GameLog = memo(function GameLog({ events }: GameLogProps) {
   const { t } = useTranslation();
   const logEndRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const isAtBottomRef = useRef(true);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    isAtBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  }, []);
 
   useEffect(() => {
-    logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (isAtBottomRef.current) {
+      logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [events]);
 
   return (
@@ -42,7 +52,7 @@ export function GameLog({ events }: GameLogProps) {
         <span className="text-xs font-semibold text-gray-400">{t('gameLog.title')}</span>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-2 space-y-1">
+      <div ref={scrollRef} onScroll={handleScroll} className="flex-1 overflow-y-auto p-2 space-y-1">
         {events.length === 0 && (
           <p className="text-xs text-gray-600 text-center mt-6">{t('gameLog.noEvents')}</p>
         )}
@@ -63,7 +73,7 @@ export function GameLog({ events }: GameLogProps) {
       </div>
     </div>
   );
-}
+});
 
 function formatEvent(event: GameEvent, t: (key: string) => string): string {
   switch (event.type) {

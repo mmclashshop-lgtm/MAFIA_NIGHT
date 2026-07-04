@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Player, Phase, TEAM_COLORS } from '@mafia/shared';
 import { cn } from '../../lib/utils';
@@ -13,7 +14,7 @@ interface PlayerCardProps {
   onAction?: () => void;
 }
 
-export function PlayerCard({ player, isCurrentPlayer, phase, isDead = false, onAction }: PlayerCardProps) {
+export const PlayerCard = memo(function PlayerCard({ player, isCurrentPlayer, phase, isDead = false, onAction }: PlayerCardProps) {
   const { t } = useTranslation();
   const isNightActionPhase = phase === 'night';
   const isVotingPhase = phase === 'voting';
@@ -93,4 +94,4 @@ export function PlayerCard({ player, isCurrentPlayer, phase, isDead = false, onA
       )}
     </button>
   );
-}
+});

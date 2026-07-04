@@ -18,8 +18,9 @@ import { CinematicDeathOverlay } from '../components/cinematic/CinematicDeathOve
 import { WinCelebration } from '../components/cinematic/WinCelebration';
 import { SkeletonGame } from '../components/common/Skeleton';
 import { useSound } from '../hooks/useSound';
+import { useSoundStore } from '../store/soundStore';
 import { TEAM_COLORS } from '@mafia/shared';
-import { Users, Skull, LogOut } from 'lucide-react';
+import { Users, Skull, LogOut, Volume2, VolumeX } from 'lucide-react';
 
 export function Game() {
   const { t } = useTranslation();
@@ -33,6 +34,7 @@ export function Game() {
   const [showDeathEffect, setShowDeathEffect] = useState(false);
   const prevAliveRef = useRef(true);
   useSound();
+  const { muted, toggleMuted } = useSoundStore();
 
   const phase = gameState?.phase ?? 'lobby';
   const players = gameState?.players ?? [];
@@ -118,15 +120,18 @@ export function Game() {
         {/* Player counts */}
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-3 text-xs text-gray-500">
+            <button onClick={toggleMuted} className="p-1.5 rounded-lg hover:bg-white/5 transition-colors" title={muted ? t('game.unmute') : t('game.mute')}>
+              {muted ? <VolumeX className="w-4 h-4 text-gray-500" /> : <Volume2 className="w-4 h-4 text-gray-400" />}
+            </button>
             <span className="flex items-center gap-1.5">
               <Users className="w-3.5 h-3.5 text-green-400" />
               <span className="text-green-400 font-medium">{alivePlayers.length}</span>
-              <span>حي</span>
+              <span>{t('game.alive')}</span>
             </span>
             <span className="flex items-center gap-1.5">
               <Skull className="w-3.5 h-3.5 text-red-400" />
               <span className="text-red-400 font-medium">{deadPlayers.length}</span>
-              <span>ميت</span>
+              <span>{t('game.dead')}</span>
             </span>
           </div>
         </div>

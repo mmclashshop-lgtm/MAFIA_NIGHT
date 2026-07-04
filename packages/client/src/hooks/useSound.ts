@@ -1,12 +1,18 @@
 import { useEffect, useRef } from 'react';
-import { sound } from '../lib/sound';
+import { sound, setSoundMuted } from '../lib/sound';
 import { getSocket } from '../lib/socket';
 import { useGameStore } from '../store/gameStore';
+import { useSoundStore } from '../store/soundStore';
 
 export function useSound() {
+  const muted = useSoundStore((s) => s.muted);
   const gameState = useGameStore((s) => s.gameState);
   const prevPhase = useRef(gameState?.phase);
   const prevDay = useRef(gameState?.day);
+
+  useEffect(() => {
+    setSoundMuted(muted);
+  }, [muted]);
 
   useEffect(() => {
     if (!gameState) return;

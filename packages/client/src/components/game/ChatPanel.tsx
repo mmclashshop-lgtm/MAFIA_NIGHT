@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { memo, useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGameStore } from '../../store/gameStore';
 import { useSocket as useSocketHook } from '../../hooks/useSocket';
@@ -17,7 +17,7 @@ interface ChatPanelProps {
   isDead?: boolean;
 }
 
-export function ChatPanel({ isNight = false, isDead = false }: ChatPanelProps) {
+export const ChatPanel = memo(function ChatPanel({ isNight = false, isDead = false }: ChatPanelProps) {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [mafiaMessages, setMafiaMessages] = useState<ChatMessage[]>([]);
@@ -28,6 +28,8 @@ export function ChatPanel({ isNight = false, isDead = false }: ChatPanelProps) {
   const gameState = useGameStore((s) => s.gameState);
   const { sendChat, sendMafiaChat } = useSocketHook();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const isAtBottomRef = useRef(true);
 
   const currentPlayer = gameState?.players.find(p => p.id === playerId);
   const isMafia = currentPlayer?.team === 'mafia' || currentPlayer?.role?.id === 'godfather';
@@ -35,8 +37,16 @@ export function ChatPanel({ isNight = false, isDead = false }: ChatPanelProps) {
 
   const activeMessages = tab === 'mafia' ? mafiaMessages : messages;
 
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    isAtBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  }, []);
+
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (isAtBottomRef.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [activeMessages]);
 
   useEffect(() => {
@@ -96,7 +106,7 @@ export function ChatPanel({ isNight = false, isDead = false }: ChatPanelProps) {
           </div>
         )}
 
-        <div className="flex-1 overflow-y-auto p-3 space-y-2">
+        <div ref={scrollRef} onScroll={handleScroll} className="flex-1 overflow-y-auto p-3 space-y-2">
           {activeMessages.length === 0 && (
             <p className="text-sm text-gray-500 text-center mt-4">
               {tab === 'mafia' ? t('chatPanel.mafiaChat') : canChat ? t('chatPanel.noMessages') : t('chatPanel.chatDayOnly')}
@@ -132,4 +142,4 @@ export function ChatPanel({ isNight = false, isDead = false }: ChatPanelProps) {
       </div>
     </div>
   );
-}
+});

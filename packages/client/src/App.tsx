@@ -2,11 +2,14 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/layout/Layout';
 import { useGameStore } from './store/gameStore';
+import { useSocialSocket } from './hooks/useSocialSocket';
 import { LoadingSpinner } from './components/common/LoadingSpinner';
 import { connectSocket } from './lib/socket';
 
 function AppInit() {
   const connected = useGameStore((s) => s.connected);
+
+  useSocialSocket();
 
   useEffect(() => {
     if (!connected) {
@@ -25,6 +28,7 @@ const PlayerStats = lazy(() => import('./pages/PlayerStats').then((m) => ({ defa
 const Profile = lazy(() => import('./pages/Profile').then((m) => ({ default: m.Profile })));
 const Tutorial = lazy(() => import('./pages/Tutorial').then((m) => ({ default: m.Tutorial })));
 const Friends = lazy(() => import('./pages/Friends').then((m) => ({ default: m.Friends })));
+const Store = lazy(() => import('./pages/Store').then((m) => ({ default: m.Store })));
 
 function SuspenseWrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -57,6 +61,7 @@ export default function App() {
           <Route path="/profile/:name" element={<Profile />} />
           <Route path="/tutorial" element={<Tutorial />} />
           <Route path="/friends" element={<Friends />} />
+          <Route path="/store" element={<Store />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </SuspenseWrapper>

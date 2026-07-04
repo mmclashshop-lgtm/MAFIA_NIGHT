@@ -7,6 +7,7 @@ const roles = [
   { id: 'mafia', team: 'tutorial', icon: Skull, color: 'text-red-400' },
   { id: 'godfather', team: 'tutorial', icon: Skull, color: 'text-red-400' },
   { id: 'doctor', team: 'tutorial', icon: Shield, color: 'text-green-400' },
+  { id: 'medic', team: 'tutorial', icon: Heart, color: 'text-green-400' },
   { id: 'cop', team: 'tutorial', icon: Search, color: 'text-green-400' },
   { id: 'serial_killer', team: 'tutorial', icon: Crosshair, color: 'text-purple-400' },
   { id: 'witch', team: 'tutorial', icon: Flask, color: 'text-purple-400' },

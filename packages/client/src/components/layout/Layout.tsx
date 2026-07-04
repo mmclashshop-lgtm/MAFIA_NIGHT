@@ -61,10 +61,16 @@ export function Layout({ children }: LayoutProps) {
                 : `mx-auto px-4 py-6 pb-20 md:pb-6 w-full ${getContainerClass()}`
             }
           >
-            {children}
+            <div className="flex gap-4">
+              <div className="flex-1 min-w-0">{children}</div>
+              {!isHome && !isGame && !isLobby && (
+                <aside className="hidden md:block w-64 shrink-0 space-y-4">
+                  <PartyBar />
+                </aside>
+              )}
+            </div>
           </main>
           <MobileNav />
-          <PartyBar />
           <Toasts />
         </div>
       </BackgroundSystem>

@@ -8,6 +8,7 @@ import {
   User,
   GraduationCap,
   Users,
+  ShoppingBag,
   Globe,
 } from 'lucide-react';
 
@@ -26,6 +27,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const NAV_ITEMS = [
     { path: '/', icon: Home, labelKey: 'nav.home' },
     { path: '/leaderboard', icon: Trophy, labelKey: 'nav.leaderboard' },
+    { path: '/store', icon: ShoppingBag, labelKey: 'nav.store' },
     { path: '/profile/me', icon: User, labelKey: 'nav.profile' },
     { path: '/friends', icon: Users, labelKey: 'nav.friends' },
     { path: '/tutorial', icon: GraduationCap, labelKey: 'nav.tutorial' },

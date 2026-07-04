@@ -6,6 +6,7 @@
   },
   "nav": {
     "home": "الرئيسية",
+    "store": "المتجر",
     "leaderboard": "المتصدرين",
     "profile": "الملف الشخصي",
     "friends": "الأصدقاء",
@@ -103,16 +104,16 @@
     "player": "لاعب",
     "ready": "جاهز!",
     "clickToReady": "اضغط للتأهب",
-    "waitingForPlayers": "انتظار {count} لاعبين على الأقل...",
+    "waitingForPlayers": "انتظار {{count}} لاعبين على الأقل...",
     "roomIsFull": "الغرفة ممتلئة",
-    "addedBots": "تمت إضافة {count} روبوت",
+    "addedBots": "تمت إضافة {{count}} روبوت",
     "roomCodeCopied": "تم نسخ كود الغرفة!",
     "failedToStart": "فشل في بدء اللعبة",
     "failedToAddBots": "فشل في إضافة الروبوتات",
     "players": "اللاعبين",
-    "playersCount": "{current} / {max} لاعبين",
+    "playersCount": "{{current}} / {{max}} لاعبين",
     "unspecifiedPlayers": "لاعبون",
-    "notReadyCount": "{count} غير جاهز"
+    "notReadyCount": "{{count}} غير جاهز"
   },
   "game": {
     "loading": "جارٍ تحميل اللعبة...",
@@ -121,7 +122,7 @@
     "mafiaWins": "🔪 المافيا تفوز!",
     "townWins": "⭐ البلدة تفوز!",
     "neutralWins": "🌀 المحايدون يفوزون!",
-    "gameLasted": "استمرت اللعبة {days} يوماً مع {players} لاعبين.",
+    "gameLasted": "استمرت اللعبة {{days}} يوماً مع {{players}} لاعبين.",
     "playAgain": "العب مرة أخرى",
     "restarting": "جارٍ إعادة التشغيل...",
     "allRoles": "جميع الأدوار",
@@ -129,10 +130,10 @@
     "dead": "ميت",
     "nightFalls": "🌙 الليل يحل على البلدة... أغمض عينيك",
     "dayHasCome": "☀️ جاء النهار. ناقش من قد يكون المافيا!",
-    "deadCount": "💀 موتى ({count})",
+    "deadCount": "💀 موتى ({{count}})",
     "nightActionSubmitted": "🌙 تم تقديم الإجراء الليلي",
     "voteSubmitted": "🗳️ تم تقديم التصويت",
-    "day": "اليوم {number}",
+    "day": "اليوم {{number}}",
     "remaining": "متبقي",
     "failed": "فشل",
     "failedToRestart": "فشل في إعادة التشغيل",
@@ -204,7 +205,7 @@
       "desc": "عاشقان. إذا مات أحدهما، يموت الآخر حسرة. يفوزان معاً."
     },
     "yourRole": "دورك",
-    "team": "فريق {team}",
+    "team": "فريق {{team}}",
     "mafiaHint": "أعضاء المافيا: اعملوا معاً للتخلص من البلدة.",
     "team_town": "البلدة",
     "team_mafia": "المافيا",
@@ -243,23 +244,23 @@
     "backToLeaderboard": "عودة إلى المتصدرين",
     "playerStatistics": "إحصائيات اللاعب",
     "back": "رجوع",
-    "winRate": "نسبة الفوز ({wins}/{total})",
+    "winRate": "نسبة الفوز ({{wins}}/{{total}})",
     "totalKills": "إجمالي القتلى",
-    "survivalRate": "نسبة البقاء ({survived}/{total})",
+    "survivalRate": "نسبة البقاء ({{survived}}/{{total}})",
     "gamesPlayed": "الألعاب الملعوبة",
     "roleStatistics": "إحصائيات الأدوار",
-    "games": "{count} ألعاب",
+    "games": "{{count}} ألعاب",
     "recentGames": "الألعاب الأخيرة",
     "won": "فوز",
     "lost": "خسارة",
-    "day": "اليوم {count}"
+    "day": "اليوم {{count}}"
   },
   "profile": {
     "statistics": "الإحصائيات",
-    "achievements": "الإنجازات ({count})",
+    "achievements": "الإنجازات ({{count}})",
     "recentGames": "الألعاب الأخيرة",
     "pts": "نقاط",
-    "bestStreak": "أفضل سلسلة: {count} فوز",
+    "bestStreak": "أفضل سلسلة: {{count}} فوز",
     "winRate": "نسبة الفوز",
     "wins": "فوز",
     "kills": "قتلى",
@@ -272,15 +273,26 @@
     "noAchievements": "لا توجد إنجازات بعد",
     "playMore": "العب المزيد من الألعاب لفتح الإنجازات!",
     "noGamesPlayed": "لم تلعب أي ألعاب بعد",
-    "day": "اليوم {count}",
+    "day": "اليوم {{count}}",
     "won": "فوز",
     "lost": "خسارة",
     "elo": "ELO",
     "level": "المستوى"
   },
+  "store": {
+    "title": "??????",
+    "coins": "????",
+    "back": "????",
+    "frames": "?????? ??????",
+    "titles": "?????",
+    "icons": "???????",
+    "owned": "?????",
+    "failed": "???? ????? ??????",
+    "buy": "????"
+  },
   "leaderboard": {
     "title": "المتصدرين",
-    "gamesPlayedBy": "{games} لعبة بواسطة {players} لاعب",
+    "gamesPlayedBy": "{{games}} لعبة بواسطة {{players}} لاعب",
     "back": "رجوع",
     "rank": "الترتيب",
     "winRate": "نسبة الفوز",
@@ -297,7 +309,7 @@
   },
   "voiceChat": {
     "voice": "صوت",
-    "connected": "({count} متصل)",
+    "connected": "({{count}} متصل)",
     "joinVoice": "انضم للصوت",
     "join": "انضمام",
     "unmute": "إلغاء الكتم",
@@ -309,13 +321,13 @@
     "micRequired": "صلاحية الميكروفون مطلوبة"
   },
   "nightActions": {
-    "title": "🌙 إجراء ليلي: {role}",
+    "title": "🌙 إجراء ليلي: {{role}}",
     "savePotion": "💚 جرعة إنقاذ",
     "killPotion": "💀 جرعة قتل",
     "chooseSave": "اختر لاعباً لإنقاذه من الموت الليلة",
     "chooseKill": "اختر لاعباً لقتله الليلة",
     "choosePotion": "اختر جرعة أولاً",
-    "chooseTarget": "اختر هدفاً لـ {verb}",
+    "chooseTarget": "اختر هدفاً لـ {{verb}}",
     "submitting": "جارٍ الإرسال...",
     "save": "إنقاذ",
     "kill": "قتل",
@@ -357,7 +369,7 @@
     "title": "🗳️ تصويت لإقصاء",
     "choosePlayer": "اختر لاعباً لإقصائه",
     "voting": "جارٍ التصويت...",
-    "eliminate": "إقصاء {name}",
+    "eliminate": "إقصاء {{name}}",
     "selectPlayer": "اختر لاعباً"
   },
   "settingsPanel": {
@@ -381,7 +393,7 @@
     "day": "☀️ النهار",
     "voting": "🗳️ التصويت",
     "gameOver": "🏁 انتهت اللعبة",
-    "dayLabel": "اليوم {number}",
+    "dayLabel": "اليوم {{number}}",
     "remaining": "متبقي"
   },
   "deathReveal": {
@@ -404,7 +416,7 @@
   "matchmaking": {
     "quickPlay": "لعب سريع",
     "searching": "جارٍ البحث عن لاعبين...",
-    "playersInQueue": "{count} لاعب(ين) في الانتظار",
+    "playersInQueue": "{{count}} لاعب(ين) في الانتظار",
     "cancel": "إلغاء",
     "cancelling": "جارٍ الإلغاء..."
   },
@@ -453,3 +465,4 @@
     "generic": "حدث خطأ ما"
   }
 }
+

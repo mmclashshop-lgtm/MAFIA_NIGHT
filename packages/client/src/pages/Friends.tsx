@@ -5,12 +5,12 @@ import { useSocialStore } from '../store/socialStore';
 import { getSocket } from '../lib/socket';
 import { PlayerAvatar } from '../components/common/PlayerAvatar';
 import { EmptyState } from '../components/common/EmptyState';
-import { ArrowLeft, UserPlus, Users, MessageCircle, Search, X, Check, Loader2 } from 'lucide-react';
+import { ArrowLeft, UserPlus, Users, MessageCircle, Search, X, Check, Loader2, UserCheck } from 'lucide-react';
 
 export function Friends() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { friends, friendRequests, setFriends, removeFriendRequest, addFriend } = useSocialStore();
+  const { friends, friendRequests, setFriends, removeFriend, removeFriendRequest, addFriend } = useSocialStore();
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [searching, setSearching] = useState(false);
@@ -38,6 +38,7 @@ export function Friends() {
 
   const handleRemoveFriend = (friendUserId: string) => {
     getSocket().emit('friend:remove', { userId: friendUserId });
+    removeFriend(friendUserId);
   };
 
   const handleSearch = async () => {
@@ -190,7 +191,14 @@ export function Friends() {
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => getSocket().emit('friend:remove', { userId: friend.userId })}
+                    onClick={() => getSocket().emit('party:invite', { targetUserId: friend.userId })}
+                    className="text-xs px-2 py-1 rounded bg-green-900/30 text-green-400 hover:bg-green-900/50 transition-colors"
+                    title={t('friends.invite')}
+                  >
+                    <UserCheck className="w-3 h-3" />
+                  </button>
+                  <button
+                    onClick={() => handleRemoveFriend(friend.userId)}
                     className="text-xs px-2 py-1 rounded bg-white/5 text-gray-400 hover:bg-red-900/20 hover:text-red-400 transition-colors"
                   >
                     <X className="w-3 h-3" />
@@ -232,7 +240,7 @@ export function Friends() {
                   </div>
                 </div>
                 <button
-                  onClick={() => getSocket().emit('friend:remove', { userId: friend.userId })}
+                  onClick={() => handleRemoveFriend(friend.userId)}
                   className="text-xs px-2 py-1 rounded bg-white/5 text-gray-500 hover:bg-red-900/20 hover:text-red-400 transition-colors"
                 >
                   <X className="w-3 h-3" />

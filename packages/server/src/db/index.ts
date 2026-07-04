@@ -83,6 +83,9 @@ export interface PlayerProfile {
     dayCount: number;
     startedAt: number;
   }>;
+  achievements: string[];
+  coins: number;
+  inventory: string[];
   elo: Record<string, number>;
   xp: number;
   level: number;
@@ -242,6 +245,9 @@ function normalizePlayerProfile(profile: Partial<PlayerProfile>, userId: string,
     bestWinStreak: profile.bestWinStreak ?? 0,
     roleStats: profile.roleStats ?? {},
     recentGames: Array.isArray(profile.recentGames) ? profile.recentGames : [],
+    achievements: Array.isArray(profile.achievements) ? profile.achievements : [],
+    coins: profile.coins ?? 0,
+    inventory: Array.isArray(profile.inventory) ? profile.inventory : [],
     elo: {
       casual: profile.elo?.['casual'] ?? DEFAULT_ELO,
       competitive: profile.elo?.['competitive'] ?? DEFAULT_ELO,
@@ -285,6 +291,9 @@ export function getOrCreatePlayerProfile(first: string, second?: string): Player
     bestWinStreak: 0,
     roleStats: {},
     recentGames: [],
+    achievements: [],
+    coins: 0,
+    inventory: [],
     elo: { casual: DEFAULT_ELO, competitive: DEFAULT_ELO },
     xp: 0,
     level: 1,
@@ -493,4 +502,53 @@ function getRankLabel(score: number): string {
   if (score >= 500) return 'Gold';
   if (score >= 200) return 'Silver';
   return 'Bronze';
+}
+
+// Store / Shop
+export function getPlayerInventory(userId: string): string[] {
+  const profiles = readProfiles();
+  for (const [, profile] of profiles) {
+    if (profile.userId === userId) return profile.inventory ?? [];
+  }
+  return [];
+}
+
+export function getPlayerCoins(userId: string): number {
+  const profiles = readProfiles();
+  for (const [, profile] of profiles) {
+    if (profile.userId === userId) return profile.coins ?? 0;
+  }
+  return 0;
+}
+
+export function addCoins(userId: string, amount: number): boolean {
+  const profiles = readProfiles();
+  for (const [, profile] of profiles) {
+    if (profile.userId === userId) {
+      profile.coins = (profile.coins ?? 0) + amount;
+      writeProfiles(profiles);
+      return true;
+    }
+  }
+  return false;
+}
+
+export function buyItem(userId: string, itemId: string, price: number): { success: boolean; error?: string } {
+  const profiles = readProfiles();
+  for (const [, profile] of profiles) {
+    if (profile.userId === userId) {
+      if ((profile.inventory ?? []).includes(itemId)) {
+        return { success: false, error: 'Already owned' };
+      }
+      if ((profile.coins ?? 0) < price) {
+        return { success: false, error: 'Not enough coins' };
+      }
+      profile.coins -= price;
+      if (!profile.inventory) profile.inventory = [];
+      profile.inventory.push(itemId);
+      writeProfiles(profiles);
+      return { success: true };
+    }
+  }
+  return { success: false, error: 'Profile not found' };
 }

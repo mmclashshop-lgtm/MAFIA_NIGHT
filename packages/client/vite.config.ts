@@ -4,6 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 
 export default defineConfig(({ command, mode }) => ({
+  base: '/MAFIA_NIGHT/',
   plugins: [
     react(),
     VitePWA({
@@ -18,7 +19,7 @@ export default defineConfig(({ command, mode }) => ({
         background_color: '#0A0A0A',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: mode === 'development' ? '/' : '/mafia-night-2/',
+        start_url: mode === 'development' ? '/' : '/MAFIA_NIGHT/',
         icons: [
           { src: 'pwa-192x192.svg', sizes: '192x192', type: 'image/svg+xml' },
           { src: 'pwa-512x512.svg', sizes: '512x512', type: 'image/svg+xml' },

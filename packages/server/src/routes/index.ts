@@ -8,8 +8,11 @@ import {
   getPlayerProfile,
   getPlayerProfileByUserId,
   getFriendProfiles,
+  getPlayerInventory,
+  getPlayerCoins,
+  buyItem,
 } from '../db';
-import { getRank } from '@mafia/shared';
+import { getRank, SHOP_ITEMS } from '@mafia/shared';
 
 const router = Router();
 
@@ -63,6 +66,8 @@ router.get('/stats/player/:name', (req, res) => {
     xp: profile?.xp ?? 0,
     level: profile?.level ?? 1,
     userId: profile?.userId ?? '',
+    achievements: profile?.achievements ?? [],
+    coins: profile?.coins ?? 0,
   });
 });
 
@@ -86,6 +91,39 @@ router.get('/profile/:userId', (req, res) => {
     return;
   }
   res.json(profile);
+});
+
+// Store: list all items
+router.get('/store/items', (_req, res) => {
+  res.json(SHOP_ITEMS);
+});
+
+// Store: get player inventory + coins
+router.get('/store/inventory/:userId', (req, res) => {
+  const inventory = getPlayerInventory(req.params.userId);
+  const coins = getPlayerCoins(req.params.userId);
+  res.json({ inventory, coins });
+});
+
+// Store: buy item
+router.post('/store/buy', (req, res) => {
+  const { userId, itemId } = req.body;
+  if (!userId || !itemId) {
+    res.status(400).json({ success: false, error: 'Missing userId or itemId' });
+    return;
+  }
+  const item = SHOP_ITEMS.find(i => i.id === itemId);
+  if (!item) {
+    res.status(404).json({ success: false, error: 'Item not found' });
+    return;
+  }
+  const result = buyItem(userId, itemId, item.price);
+  if (result.success) {
+    const coins = getPlayerCoins(userId);
+    res.json({ success: true, coins });
+  } else {
+    res.status(400).json(result);
+  }
 });
 
 export { router as apiRoutes };

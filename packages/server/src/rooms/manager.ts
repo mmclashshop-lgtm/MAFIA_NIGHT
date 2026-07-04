@@ -29,7 +29,7 @@ import {
   botGetVoteDelay,
 } from '../game/botManager';
 import { saveGame, getOrCreatePlayerProfile, savePlayerProfile, getPlayerProfileByUserId } from '../db';
-import { calculateGameXP, calculateElo, calculateGameElo, getLevelProgress, calculateScore, getLevel, getRank, DEFAULT_ELO, getAverageElo, pickDailyQuests, DAILY_QUESTS_POOL } from '@mafia/shared';
+import { calculateGameXP, calculateElo, calculateGameElo, getLevelProgress, calculateScore, getLevel, getRank, DEFAULT_ELO, getAverageElo, pickDailyQuests, DAILY_QUESTS_POOL, ACHIEVEMENTS } from '@mafia/shared';
 
 const ROOM_CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
@@ -690,6 +690,10 @@ export class RoomManager {
           profile.recentGames = profile.recentGames.slice(-20);
         }
 
+        // Coins
+        const gameCoins = 10 + (player.team === winner ? 5 : 0) + (killCounts.get(player.id) ?? 0) * 2 + (player.alive ? 3 : 0);
+        profile.coins = (profile.coins ?? 0) + gameCoins;
+
         // Score
         profile.score = calculateScore({
           games: profile.totalGames,
@@ -721,6 +725,33 @@ export class RoomManager {
         profile.xp += gameXP;
         const { level: newLevel } = getLevelProgress(profile.xp);
         profile.level = newLevel;
+
+        // Achievement checking
+        const newAchievements: string[] = [];
+        const unlocked = new Set(profile.achievements);
+        if (!unlocked.has('first_blood') && profile.totalWins >= 1) newAchievements.push('first_blood');
+        if (!unlocked.has('survivor') && profile.totalGames >= 10) newAchievements.push('survivor');
+        if (!unlocked.has('veteran') && profile.totalGames >= 50) newAchievements.push('veteran');
+        if (!unlocked.has('legend') && profile.totalGames >= 100) newAchievements.push('legend');
+        if (!unlocked.has('unstoppable') && profile.consecutiveWins >= 3) newAchievements.push('unstoppable');
+        if (!unlocked.has('unkillable') && profile.totalSurvived >= 5) newAchievements.push('unkillable');
+        if (!unlocked.has('fast_win') && player.team === winner && this.state.day <= 2) newAchievements.push('fast_win');
+        if (player.team === winner) {
+          const roleKey = player.role?.id ?? 'unknown';
+          const roleWins = profile.roleStats[roleKey]?.wins ?? 0;
+          if (!unlocked.has('puppet_master') && roleKey === 'mafia' && roleWins >= 5) newAchievements.push('puppet_master');
+          if (!unlocked.has('sheriff') && roleKey === 'cop' && roleWins >= 5) newAchievements.push('sheriff');
+          if (!unlocked.has('godfather') && roleKey === 'godfather' && roleWins >= 5) newAchievements.push('godfather');
+
+          const aliveTeammates = this.state.players.filter(p => p.team === player.team && p.alive && p.id !== player.id);
+          if (!unlocked.has('perfect_game') && aliveTeammates.length > 0 && aliveTeammates.every(p => p.alive)) newAchievements.push('perfect_game');
+
+          const aliveTeam = this.state.players.filter(p => p.team === player.team && p.alive);
+          if (!unlocked.has('last_standing') && aliveTeam.length === 1 && aliveTeam[0]?.id === player.id) newAchievements.push('last_standing');
+        }
+        for (const id of newAchievements) {
+          profile.achievements.push(id);
+        }
 
         // Daily quest tracking
         const today = new Date().toISOString().slice(0, 10);
@@ -764,6 +795,8 @@ export class RoomManager {
             newLevel,
             questBonusXP,
             totalXP: gameXP + questBonusXP,
+            coins: gameCoins,
+            newAchievements: newAchievements.length > 0 ? newAchievements : undefined,
           });
         }
       }

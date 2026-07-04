@@ -10,7 +10,8 @@ export { DEFAULT_GAME_SETTINGS } from './types/game';
 export { ROLES, ROLE_ORDER, TEAM_NAMES, TEAM_COLORS } from './constants/roles';
 export { PHASE_ORDER, PHASE_LABELS, PHASE_DURATIONS, MIN_PLAYERS, MAX_PLAYERS, ROOM_CODE_LENGTH } from './constants/phases';
 
-export { RANK_TIERS, getRank, calculateScore } from './types/achievements';
+export { RANK_TIERS, getRank, calculateScore, ACHIEVEMENTS } from './types/achievements';
+export type { AchievementId, Achievement } from './types/achievements';
 
 // Schemas
 export { createRoomSchema, joinRoomSchema, reconnectSchema, nightActionSchema, voteSchema, chatMessageSchema, gameSettingsSchema, addBotsSchema, voiceSignalSchema, updateSettingsSchema, matchmakingJoinSchema } from './schemas/zod';
@@ -30,3 +31,7 @@ export type { DailyQuest } from './engine/progression';
 
 // Network / Social types
 export type { FriendProfile, FriendRequest, PartyMember, Party, FriendStatus, OnlineStatus } from './types/network';
+
+// Shop
+export { SHOP_ITEMS } from './types/shop';
+export type { ShopItem } from './types/shop';

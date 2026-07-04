@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../hooks/useLanguage';
-import { Home, Trophy, User, GraduationCap, Globe, Users } from 'lucide-react';
+import { Home, Trophy, User, GraduationCap, Globe, Users, ShoppingBag } from 'lucide-react';
 
 export function MobileNav() {
   const { t } = useTranslation();
@@ -11,6 +11,7 @@ export function MobileNav() {
 
   const NAV_ITEMS = [
     { path: '/', icon: Home, labelKey: 'nav.home' },
+    { path: '/store', icon: ShoppingBag, labelKey: 'nav.store' },
     { path: '/leaderboard', icon: Trophy, labelKey: 'nav.leaderboard' },
     { path: '/profile/me', icon: User, labelKey: 'nav.profile' },
     { path: '/friends', icon: Users, labelKey: 'nav.friends' },

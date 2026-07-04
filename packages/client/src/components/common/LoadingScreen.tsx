@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const tipKeys: string[] = [
@@ -6,9 +7,37 @@ const tipKeys: string[] = [
   'loading.tip9', 'loading.tip10', 'loading.tip11', 'loading.tip12',
 ];
 
+interface SkullTarget {
+  id: number;
+  x: number;
+  y: number;
+}
+
 export function LoadingScreen() {
   const { t } = useTranslation();
   const tipKey = tipKeys[Math.floor(Math.random() * tipKeys.length)]!;
+  const [skulls, setSkulls] = useState<SkullTarget[]>([]);
+  const [score, setScore] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newSkull: SkullTarget = {
+        id: Date.now(),
+        x: 10 + Math.random() * 80,
+        y: 10 + Math.random() * 80,
+      };
+      setSkulls((prev) => [...prev.slice(-4), newSkull]);
+      setTimeout(() => {
+        setSkulls((prev) => prev.filter((s) => s.id !== newSkull.id));
+      }, 800);
+    }, 1200);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleCatch = (id: number) => {
+    setSkulls((prev) => prev.filter((s) => s.id !== id));
+    setScore((s) => s + 1);
+  };
 
   return (
     <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#0A0A0A]">
@@ -19,7 +48,28 @@ export function LoadingScreen() {
       {/* Ambient glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-radial from-[#8B0000]/10 to-transparent rounded-full blur-3xl" />
 
+      {/* Skull minigame */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {skulls.map((skull) => (
+          <button
+            key={skull.id}
+            onClick={() => handleCatch(skull.id)}
+            className="absolute w-8 h-8 flex items-center justify-center text-lg pointer-events-auto animate-fade-in hover:scale-125 transition-transform"
+            style={{ left: `${skull.x}%`, top: `${skull.y}%` }}
+          >
+            💀
+          </button>
+        ))}
+      </div>
+
       <div className="relative z-10 flex flex-col items-center">
+        {/* Score */}
+        {score > 0 && (
+          <div className="absolute -top-12 left-1/2 -translate-x-1/2 text-xs text-gray-500">
+            🎯 {t('loading.caught', { count: score })}
+          </div>
+        )}
+
         {/* Logo */}
         <div className="relative mb-8">
           <div className="absolute inset-0 bg-[#8B0000]/20 rounded-full blur-3xl scale-150" />

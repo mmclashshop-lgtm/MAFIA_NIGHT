@@ -1,4 +1,4 @@
-{
+﻿{
   "brand": {
     "name": "Mafia Night",
     "tagline": "Deception. Strategy. Survival.",
@@ -7,6 +7,7 @@
   "nav": {
     "home": "Home",
     "leaderboard": "Leaderboard",
+    "store": "Store",
     "profile": "Profile",
     "friends": "Friends",
     "tutorial": "How to Play",
@@ -28,7 +29,7 @@
       },
       "roles": {
         "title": "14 Unique Roles",
-        "desc": "From Mafia to Doctor, Cop to Jester — every game is different."
+        "desc": "From Mafia to Doctor, Cop to Jester â€” every game is different."
       },
       "voice": {
         "title": "Voice Chat",
@@ -103,42 +104,44 @@
     "player": "Player",
     "ready": "Ready!",
     "clickToReady": "Click to Ready Up",
-    "waitingForPlayers": "Waiting for at least {count} players...",
+    "waitingForPlayers": "Waiting for at least {{count}} players...",
     "roomIsFull": "Room is full",
-    "addedBots": "Added {count} bot(s)",
+    "addedBots": "Added {{count}} bot(s)",
     "roomCodeCopied": "Room code copied!",
     "failedToStart": "Failed to start",
     "failedToAddBots": "Failed to add bots",
     "players": "Players",
-    "playersCount": "{current} / {max} Players",
+    "playersCount": "{{current}} / {{max}} Players",
     "unspecifiedPlayers": "players",
-    "notReadyCount": "{count} not ready"
+    "notReadyCount": "{{count}} not ready"
   },
   "game": {
     "loading": "Loading game...",
     "reconnecting": "Reconnecting to server...",
     "leaveGame": "Leave Game",
-    "mafiaWins": "🔪 Mafia Wins!",
-    "townWins": "⭐ Town Wins!",
-    "neutralWins": "🌀 Neutral Wins!",
-    "gameLasted": "Game lasted {days} day(s) with {players} players.",
+    "mafiaWins": "ðŸ”ª Mafia Wins!",
+    "townWins": "â­ Town Wins!",
+    "neutralWins": "ðŸŒ€ Neutral Wins!",
+    "gameLasted": "Game lasted {{days}} day(s) with {{players}} players.",
     "playAgain": "Play Again",
     "restarting": "Restarting...",
     "allRoles": "All Roles",
     "alive": "Alive",
     "dead": "Dead",
-    "nightFalls": "🌙 Night falls over the town... close your eyes",
-    "dayHasCome": "☀️ Day has come. Discuss who might be Mafia!",
-    "deadCount": "💀 Dead ({count})",
-    "nightActionSubmitted": "🌙 Night action submitted",
-    "voteSubmitted": "🗳️ Vote submitted",
-    "day": "Day {number}",
+    "nightFalls": "ðŸŒ™ Night falls over the town... close your eyes",
+    "dayHasCome": "â˜€ï¸ Day has come. Discuss who might be Mafia!",
+    "deadCount": "ðŸ’€ Dead ({{count}})",
+    "nightActionSubmitted": "ðŸŒ™ Night action submitted",
+    "voteSubmitted": "ðŸ—³ï¸ Vote submitted",
+    "day": "Day {{number}}",
     "remaining": "remaining",
     "failed": "Failed",
     "failedToRestart": "Failed to restart",
     "leave": "Leave",
     "unknown": "Unknown",
-    "days": "days"
+    "days": "days",
+    "mute": "Mute sounds",
+    "unmute": "Unmute sounds"
   },
   "roles": {
     "mafia": {
@@ -202,7 +205,7 @@
       "desc": "Two lovers. If one dies, the other dies of heartbreak. Win together."
     },
     "yourRole": "Your Role",
-    "team": "{team} Team",
+    "team": "{{team}} Team",
     "mafiaHint": "Mafia members: work together to eliminate the Town.",
     "team_town": "Town",
     "team_mafia": "Mafia",
@@ -224,10 +227,10 @@
     "flowRepeat": "Repeat:",
     "flowRepeatDesc": "The cycle continues until one team wins!",
     "winConditions": "Win Conditions",
-    "winTown": "🏘️ Town - Eliminate all Mafia and Neutral threats.",
-    "winMafia": "🔪 Mafia - Outnumber the Town. Mafia wins when they equal or outnumber the Town.",
-    "winNeutral": "🌀 Neutral - Each Neutral role has its own win condition. Serial Killer must be the last alive.",
-    "winLovers": "💕 Lovers - Both lovers must survive to the end of the game.",
+    "winTown": "ðŸ˜ï¸ Town - Eliminate all Mafia and Neutral threats.",
+    "winMafia": "ðŸ”ª Mafia - Outnumber the Town. Mafia wins when they equal or outnumber the Town.",
+    "winNeutral": "ðŸŒ€ Neutral - Each Neutral role has its own win condition. Serial Killer must be the last alive.",
+    "winLovers": "ðŸ’• Lovers - Both lovers must survive to the end of the game.",
     "allRoles": "All Roles",
     "tips": "Tips",
     "tip1": "Pay attention to who talks and what they say - inconsistencies reveal guilt!",
@@ -241,23 +244,23 @@
     "backToLeaderboard": "Back to Leaderboard",
     "playerStatistics": "Player Statistics",
     "back": "Back",
-    "winRate": "Win Rate ({wins}/{total})",
+    "winRate": "Win Rate ({{wins}}/{{total}})",
     "totalKills": "Total Kills",
-    "survivalRate": "Survival Rate ({survived}/{total})",
+    "survivalRate": "Survival Rate ({{survived}}/{{total}})",
     "gamesPlayed": "Games Played",
     "roleStatistics": "Role Statistics",
-    "games": "{count} games",
+    "games": "{{count}} games",
     "recentGames": "Recent Games",
     "won": "Won",
     "lost": "Lost",
-    "day": "Day {count}"
+    "day": "Day {{count}}"
   },
   "profile": {
     "statistics": "Statistics",
-    "achievements": "Achievements ({count})",
+    "achievements": "Achievements ({{count}})",
     "recentGames": "Recent Games",
     "pts": "pts",
-    "bestStreak": "Best streak: {count} wins",
+    "bestStreak": "Best streak: {{count}} wins",
     "winRate": "Win Rate",
     "wins": "Wins",
     "kills": "Kills",
@@ -270,15 +273,26 @@
     "noAchievements": "No achievements yet",
     "playMore": "Play more games to unlock achievements!",
     "noGamesPlayed": "No games played yet",
-    "day": "Day {count}",
+    "day": "Day {{count}}",
     "won": "Won",
     "lost": "Lost",
     "elo": "ELO",
     "level": "Level"
   },
+  "store": {
+    "title": "Store",
+    "coins": "coins",
+    "back": "Back",
+    "frames": "Avatar Frames",
+    "titles": "Titles",
+    "icons": "Icons",
+    "owned": "Owned",
+    "failed": "Purchase failed",
+    "buy": "Buy"
+  },
   "leaderboard": {
     "title": "Leaderboard",
-    "gamesPlayedBy": "{games} games played by {players} players",
+    "gamesPlayedBy": "{{games}} games played by {{players}} players",
     "back": "Back",
     "rank": "Rank",
     "winRate": "Win Rate",
@@ -295,7 +309,7 @@
   },
   "voiceChat": {
     "voice": "Voice",
-    "connected": "({count} connected)",
+    "connected": "({{count}} connected)",
     "joinVoice": "Join voice chat",
     "join": "Join",
     "unmute": "Unmute",
@@ -307,13 +321,13 @@
     "micRequired": "Microphone access required"
   },
   "nightActions": {
-    "title": "🌙 Night Action: {role}",
-    "savePotion": "💚 Save Potion",
-    "killPotion": "💀 Kill Potion",
+    "title": "ðŸŒ™ Night Action: {{role}}",
+    "savePotion": "ðŸ’š Save Potion",
+    "killPotion": "ðŸ’€ Kill Potion",
     "chooseSave": "Choose a player to save from death tonight",
     "chooseKill": "Choose a player to kill tonight",
     "choosePotion": "Select a potion first",
-    "chooseTarget": "Choose a target to {verb}",
+    "chooseTarget": "Choose a target to {{verb}}",
     "submitting": "Submitting...",
     "save": "Save",
     "kill": "Kill",
@@ -340,22 +354,22 @@
   "gameLog": {
     "title": "Game Log",
     "noEvents": "No events yet",
-    "killed": "💀 A player was killed",
-    "healed": "💚 A player was healed",
-    "investigated": "🔍 A player was investigated",
-    "voteCast": "🗳️ A vote was cast",
-    "lynched": "⚖️ A player was lynched",
-    "roleRevealed": "📜 A role was revealed",
-    "phaseChanged": "🔄 Phase changed",
-    "unknownEvent": "📌 Unknown event"
+    "killed": "ðŸ’€ A player was killed",
+    "healed": "ðŸ’š A player was healed",
+    "investigated": "ðŸ” A player was investigated",
+    "voteCast": "ðŸ—³ï¸ A vote was cast",
+    "lynched": "âš–ï¸ A player was lynched",
+    "roleRevealed": "ðŸ“œ A role was revealed",
+    "phaseChanged": "ðŸ”„ Phase changed",
+    "unknownEvent": "ðŸ“Œ Unknown event"
   },
   "votingPanel": {
-    "voted": "✓ You have voted",
+    "voted": "âœ“ You have voted",
     "waiting": "Waiting for other players...",
-    "title": "🗳️ Vote to Eliminate",
+    "title": "ðŸ—³ï¸ Vote to Eliminate",
     "choosePlayer": "Choose a player to eliminate",
     "voting": "Voting...",
-    "eliminate": "Eliminate {name}",
+    "eliminate": "Eliminate {{name}}",
     "selectPlayer": "Select a player"
   },
   "settingsPanel": {
@@ -374,12 +388,12 @@
     "textChat": "Text Chat"
   },
   "phaseIndicator": {
-    "lobby": "⏳ Lobby",
-    "night": "🌙 Night",
-    "day": "☀️ Day",
-    "voting": "🗳️ Voting",
-    "gameOver": "🏁 Game Over",
-    "dayLabel": "Day {number}",
+    "lobby": "â³ Lobby",
+    "night": "ðŸŒ™ Night",
+    "day": "â˜€ï¸ Day",
+    "voting": "ðŸ—³ï¸ Voting",
+    "gameOver": "ðŸ Game Over",
+    "dayLabel": "Day {{number}}",
     "remaining": "remaining"
   },
   "deathReveal": {
@@ -392,7 +406,7 @@
     "disconnected": "Disconnected"
   },
   "spectatorOverlay": {
-    "title": "👁️ Spectator View"
+    "title": "ðŸ‘ï¸ Spectator View"
   },
   "errorBoundary": {
     "title": "Something went wrong",
@@ -402,7 +416,7 @@
   "matchmaking": {
     "quickPlay": "Quick Play",
     "searching": "Searching for players...",
-    "playersInQueue": "{count} player(s) in queue",
+    "playersInQueue": "{{count}} player(s) in queue",
     "cancel": "Cancel",
     "cancelling": "Cancelling..."
   },
@@ -444,4 +458,5 @@
     "generic": "Something went wrong"
   }
 }
+
 

@@ -1,6 +1,16 @@
 let audioCtx: AudioContext | null = null;
 let soundPacksLoaded = false;
 let soundPackBuffers: Record<string, AudioBuffer> = {};
+let _muted = false;
+
+export function setSoundMuted(muted: boolean) {
+  _muted = muted;
+  if (muted) stopAmbient();
+}
+
+export function isSoundMuted(): boolean {
+  return _muted;
+}
 
 function getAudioCtx(): AudioContext {
   if (!audioCtx) {
@@ -19,6 +29,7 @@ function playTone(
   volume = 0.15,
   delay = 0
 ) {
+  if (_muted) return;
   try {
     const ctx = getAudioCtx();
     const osc = ctx.createOscillator();
