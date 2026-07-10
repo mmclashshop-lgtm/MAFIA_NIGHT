@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSocket } from '../hooks/useSocket';
 import { useAuthStore } from '../store/authStore';
 import { useGameStore } from '../store/gameStore';
+import { useUIStore } from '../store/uiStore';
 import { PageTransition } from '../components/common/PageTransition';
 import { MatchmakingOverlay } from '../components/home/MatchmakingOverlay';
 import { HomeParticles } from '../components/home/HomeParticles';
 import { SiteLogo } from '../components/common/SiteLogo';
-import { Zap, Swords, LogIn, Users, Shield, Key } from 'lucide-react';
+import { Zap, Swords, LogIn, Users, Shield, Key, Loader2 } from 'lucide-react';
 import { useSiteConfigStore } from '../store/siteConfigStore';
 
 export function Home() {
@@ -19,6 +20,8 @@ export function Home() {
   const { createRoom, joinRoom, joinMatchmaking, leaveMatchmaking } = useSocket();
   const setName = useAuthStore((s) => s.setName);
   const connected = useGameStore((s) => s.connected);
+  const addToast = useUIStore((s) => s.addToast);
+  const creatingRef = useRef(false);
 
   const [name, setNameLocal] = useState(() => localStorage.getItem('mafia_player_name') ?? '');
   const [roomCode, setRoomCode] = useState('');
@@ -31,7 +34,8 @@ export function Home() {
   useEffect(() => { const t = setTimeout(() => setShowContent(true), 100); return () => clearTimeout(t); }, []);
 
   const handleCreate = async () => {
-    if (!name.trim()) return;
+    if (!name.trim() || creatingRef.current) return;
+    creatingRef.current = true;
     setCreating(true);
     setName(name.trim());
     try {
@@ -39,7 +43,11 @@ export function Home() {
       const code = await createRoom();
       await joinRoom(code, name.trim());
       navigate('/lobby');
-    } catch { setCreating(false); }
+    } catch (err) {
+      addToast('error', err instanceof Error ? err.message : 'فشل إنشاء الروم');
+      setCreating(false);
+      creatingRef.current = false;
+    }
   };
 
   const handleJoin = async () => {
@@ -50,7 +58,10 @@ export function Home() {
       localStorage.setItem('mafia_player_name', name.trim());
       await joinRoom(roomCode.trim().toUpperCase(), name.trim());
       navigate('/lobby');
-    } catch { setJoining(false); }
+    } catch (err) {
+      addToast('error', err instanceof Error ? err.message : 'فشل الانضمام للروم');
+      setJoining(false);
+    }
   };
 
   const handleQuickPlay = async () => {
@@ -59,7 +70,10 @@ export function Home() {
     localStorage.setItem('mafia_player_name', name.trim());
     setMatchmaking(true);
     try { await joinMatchmaking(name.trim()); }
-    catch { setMatchmaking(false); }
+    catch (err) {
+      addToast('error', err instanceof Error ? err.message : 'فشل الدخول في البحث');
+      setMatchmaking(false);
+    }
   };
 
   const handleCancelMatchmaking = async () => {
@@ -109,21 +123,21 @@ export function Home() {
           {/* Quick Play — primary CTA */}
           <button
             onClick={handleQuickPlay}
-            disabled={!name.trim()}
+            disabled={!name.trim() || matchmaking || !connected}
             className="btn-primary text-base px-10 py-3.5 rounded-2xl gap-2.5 mb-4 md:mb-6 animate-pulse-glow"
           >
-            <Zap className="w-5 h-5" />
-            {t('home.hero.cta')}
+            {!connected ? <Loader2 className="w-5 h-5 animate-spin" /> : matchmaking ? <Loader2 className="w-5 h-5 animate-spin" /> : <Zap className="w-5 h-5" />}
+            {!connected ? 'جاري الاتصال...' : t('home.hero.cta')}
           </button>
 
           {/* Secondary CTAs */}
           <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm md:max-w-md">
             <button
               onClick={handleCreate}
-              disabled={!name.trim() || creating}
+              disabled={!name.trim() || creating || !connected}
               className="btn-secondary flex-1 gap-2"
             >
-              <Swords className="w-4 h-4" />
+              {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Swords className="w-4 h-4" />}
               {creating ? t('home.cta.creating') : t('home.cta.createRoom')}
             </button>
             <button
@@ -152,9 +166,10 @@ export function Home() {
               </div>
               <button
                 onClick={handleJoin}
-                disabled={!name.trim() || !roomCode.trim() || joining}
+                disabled={!name.trim() || !roomCode.trim() || joining || !connected}
                 className="btn-primary w-full gap-2"
               >
+                {joining ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogIn className="w-4 h-4" />}
                 {joining ? t('home.cta.joining') : t('home.cta.joinRoom')}
               </button>
             </div>
